@@ -2,3 +2,10 @@
     max-width: 142px;
     margin-bottom: 41px;
 }
+
+@media screen and (max-width: 1023px) {
+    .logo{
+        margin-bottom: 32px;
+        margin-left: 27px;
+    }
+}

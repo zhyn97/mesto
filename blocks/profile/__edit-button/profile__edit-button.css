@@ -10,3 +10,9 @@
     margin-top: 75%;
     cursor: pointer;
 }
+
+@media screen and (max-width: 767px) {
+    .profile__edit-button{
+      margin-top: 20%;
+    }
+  }

@@ -1,0 +1,13 @@
+.popup__name{
+  display: block;
+  border: none;
+  border-bottom: 1px solid black;
+  margin: 0 auto 30px;
+  min-width: 358px;
+}
+
+@media screen and (max-width: 550px) {
+    .popup__name{
+      min-width: 238px;
+    }
+}
