@@ -1,14 +1,19 @@
 .profile__info{
-    display: grid;
+    /**display: grid;
     grid-template-rows: repeat(2,1fr);
     grid-template-columns: 1fr 24px;
     grid-gap: 16px 18px;
     margin-left: 30px;
+    margin-right: 10px;**/
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 370px;
+    align-items: end;
 }
 
 @media screen and (max-width: 767px) {
     .profile__info{
-        margin: 0 auto 36px;
-        grid-gap: 14px 10px;
+      max-width: 282px;
+      justify-content: center;
     }
 }
