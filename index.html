@@ -17,52 +17,52 @@
               <img class="avatar" src="./images/avatar.jpg" alt="Изображение профиля">
               <div class="profile__info">
                 <h1 class="profile__name">Жак-Ив Кусто</h1>
-                <button class="profile__edit-button opacity-button"></button>
+                <button type="button" class="profile__edit-button opacity-button"></button>
                 <p class="profile__occupation">Исследователь океана</p>
               </div>
-              <button class="profile__add-button opacity-button"></button>
+              <button type="button" class="profile__add-button opacity-button"></button>
           </section>
           <section class="places">
             <div class="place">
                 <img src="./images/karachevsk.jpg" alt="крачаевск" class="place__image">
                 <div class="place__name-area">
                   <h2 class="place__title">Карачаевск</h2>
-                  <button class="place__like opacity-button"></button>
+                  <button type="button" class="place__like opacity-button"></button>
                 </div>
             </div>
             <div class="place">
                 <img src="./images/elbrus.jpg" alt="Гора Эльбрус" class="place__image">
                 <div class="place__name-area">
                   <h2 class="place__title">Гора Эльбрус</h2>
-                  <button class="place__like opacity-button"></button>
+                  <button type="button" class="place__like opacity-button"></button>
                 </div>
             </div>
             <div class="place">
                 <img src="./images/dombaj.jpg" alt="Домбай" class="place__image">
                 <div class="place__name-area">
                   <h2 class="place__title">Домбай</h2>
-                  <button class="place__like opacity-button"></button>
+                  <button type="button" class="place__like opacity-button"></button>
                 </div>
             </div>
             <div class="place">
                 <img src="./images/elbrus.jpg" alt="Гора Эльбрус" class="place__image">
                 <div class="place__name-area">
                   <h2 class="place__title">Гора Эльбрус</h2>
-                  <button class="place__like opacity-button"></button>
+                  <button type="button" class="place__like opacity-button"></button>
                 </div>
             </div>
             <div class="place">
                 <img src="./images/dombaj.jpg" alt="Домбай" class="place__image">
                 <div class="place__name-area">
                   <h2 class="place__title">Домбай</h2>
-                  <button class="place__like opacity-button"></button>
+                  <button type="button" class="place__like opacity-button"></button>
                 </div>
             </div>
             <div class="place">
                 <img src="./images/karachevsk.jpg" alt="крачаевск" class="place__image">
                 <div class="place__name-area">
                   <h2 class="place__title">Карачаево-Черкесия</h2>
-                  <button class="place__like opacity-button"></button>
+                  <button type="button" class="place__like opacity-button"></button>
                 </div>
             </div>
           </section>
@@ -73,12 +73,12 @@
       
       <div class="popup">
           <div class="popup__container">
-              <button class="popup__close"></button>
+              <button type="button" class="popup__close"></button>
               <p class="popup__title">Редактировать профиль</p>
-              <form class="popup__form">
-                  <input class="popup__name" type="text">
-                  <input class="popup__occupation" type="text">
-                  <button class="popup__save-button">Сохранить</button>
+              <form name="profile_data" class="popup__form">
+                  <input name="name" class="popup__data" id="popup__name" type="text">
+                  <input name="occupation" class="popup__data" id="popup__occupation" type="text">
+                  <button type="submit" class="popup__save-button">Сохранить</button>
               </form>
           </div>
       </div>

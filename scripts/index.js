@@ -5,11 +5,13 @@ const saveButton = document.querySelector('.popup__save-button');
 const form = document.querySelector('.popup__form');
 const nameField = document.querySelector('.profile__name');
 const occupationField = document.querySelector('.profile__occupation');
-const newName = document.querySelector('.popup__name');
-const newOccupation = document.querySelector('.popup__occupation');
+const newName = document.getElementById('popup__name');
+const newOccupation = document.getElementById('popup__occupation');
 
 function openPopup(){
     popup.classList.add('popup_active');
+    newName.value = nameField.textContent;
+    newOccupation.value = occupationField.textContent;
 }
 
 function closePopup(){
@@ -17,7 +19,6 @@ function closePopup(){
 }
 
 function savePopup(event){
-    console.log(event);
     event.preventDefault();
     nameField.textContent = newName.value;
     occupationField.textContent = newOccupation.value;
@@ -32,8 +33,6 @@ function popupCliclHandler(event){
 }
 
 
-newName.value = nameField.textContent;
-newOccupation.value = occupationField.textContent;
 editButton.addEventListener('click', openPopup);
 closeButton.addEventListener('click', closePopup);
 form.addEventListener('submit', savePopup);

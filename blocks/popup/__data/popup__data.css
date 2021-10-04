@@ -1,0 +1,18 @@
+.popup__data{
+    display: block;
+    border: none;
+    border-bottom: 1px solid grey;
+    margin: 0 auto 0;
+    min-width: 358px;
+    padding-bottom: 13px;
+}
+
+.popup__data:first-of-type{
+  margin-bottom: 30px;
+}
+
+@media screen and (max-width: 550px) {
+    .popup__data{
+      min-width: 238px;
+    }
+}
