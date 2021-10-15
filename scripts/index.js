@@ -18,9 +18,7 @@ function openPopup(element){
 }
 
 function closePopup() {
-    popup.forEach((el) => {
-      el.classList.remove('popup_active');
-    });
+    popup.forEach(el => el.classList.remove('popup_active'))
 }
 function editButtonHandler(){
     openPopup(popupEdit);
