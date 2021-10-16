@@ -10,6 +10,8 @@ const newName = document.querySelector('.popup__name');
 const newOccupation = document.querySelector('.popup__occupation');
 const popupEdit = document.querySelector('.popup-edit');
 const popupAdd = document.querySelector('.popup-add');
+const likeButton = document.querySelectorAll('.place__like');
+
 
 
 
@@ -51,6 +53,7 @@ function popupCliclHandler(event){
     }
 }
 
+
 editButton.addEventListener('click', editButtonHandler);
 addButton.addEventListener('click', addButtonHandler);
 closeButton.forEach(closeButton =>
@@ -58,3 +61,54 @@ closeButton.forEach(closeButton =>
     );    
 formName.addEventListener('submit', savePopup);
 popup.forEach(popup => popup.addEventListener('mouseup',popupCliclHandler));
+
+
+
+
+
+
+////////////////////////////////////////////////функция добавления карточек
+
+const initialCards = [
+    {
+      name: 'Архыз',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+    },
+    {
+      name: 'Челябинская область',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+    },
+    {
+      name: 'Иваново',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+    },
+    {
+      name: 'Камчатка',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+    },
+    {
+      name: 'Холмогорский район',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+    },
+    {
+      name: 'Байкал',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+    }
+  ];
+
+const places = document.querySelector('.places');
+const template = document.querySelector('.template').content;
+
+function creatCard(item){
+    const element = template.querySelector('.place').cloneNode(true);
+    element.querySelector('.place__title').textContent = item.name;
+    element.querySelector('.place__image').src = item.link;
+    return element;
+}
+
+function renderCard(item){
+    const element = creatCard(item);
+    places.append(element);
+}
+
+initialCards.forEach(renderCard);
