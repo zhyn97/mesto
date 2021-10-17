@@ -103,6 +103,7 @@ function creatCard(item){
     const element = template.querySelector('.place').cloneNode(true);
     element.querySelector('.place__title').textContent = item.name;
     element.querySelector('.place__image').src = item.link;
+    element.querySelector('.place__image').alt = item.name;
     return element;
 }
 
@@ -112,3 +113,26 @@ function renderCard(item){
 }
 
 initialCards.forEach(renderCard);
+
+////добавление новых элементов
+
+const formNewCard = document.querySelector('.popup-add');
+const namePlace = document.querySelector('.name-new-place');
+const linkPlace = document.querySelector('.link-new-place');
+
+
+function addNewCard(event) {
+    event.preventDefault();
+    
+    const name = namePlace.value;
+    const link = linkPlace.value;
+    const item = {
+        name: name,
+        link: link 
+    };
+    
+    renderCard(item);
+    event.target.reset();
+}
+
+formNewCard.addEventListener('submit', addNewCard)
