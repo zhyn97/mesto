@@ -10,9 +10,6 @@ const newName = document.querySelector('.popup__name');
 const newOccupation = document.querySelector('.popup__occupation');
 const popupEdit = document.querySelector('.popup-edit');
 const popupAdd = document.querySelector('.popup-add');
-const likeButton = document.querySelectorAll('.place__like');
-
-
 
 
 function openPopup(element){
@@ -54,6 +51,7 @@ function popupCliclHandler(event){
 }
 
 
+
 editButton.addEventListener('click', editButtonHandler);
 addButton.addEventListener('click', addButtonHandler);
 closeButton.forEach(closeButton =>
@@ -61,7 +59,6 @@ closeButton.forEach(closeButton =>
     );    
 formName.addEventListener('submit', savePopup);
 popup.forEach(popup => popup.addEventListener('mouseup',popupCliclHandler));
-
 
 
 
@@ -99,17 +96,23 @@ const initialCards = [
 const places = document.querySelector('.places');
 const template = document.querySelector('.template').content;
 
+
 function creatCard(item){
     const element = template.querySelector('.place').cloneNode(true);
     element.querySelector('.place__title').textContent = item.name;
     element.querySelector('.place__image').src = item.link;
     element.querySelector('.place__image').alt = item.name;
+    //функция удаления карточек
+    element.querySelector('.place__trash').addEventListener('click', (event) => {
+        event.target.closest('.place').remove();
+    })
+
     return element;
 }
 
 function renderCard(item){
     const element = creatCard(item);
-    places.append(element);
+    places.prepend(element);
 }
 
 initialCards.forEach(renderCard);
@@ -133,6 +136,47 @@ function addNewCard(event) {
     
     renderCard(item);
     event.target.reset();
+    likeButton = document.querySelectorAll('.place__like');
+    likeButton.forEach(likeHandler);
+    placeImg = document.querySelectorAll('.place__image');
+    placeImg.forEach(bigImgOpen);
+    closePopup();
 }
 
-formNewCard.addEventListener('submit', addNewCard)
+formNewCard.addEventListener('submit', addNewCard);
+
+//функиця открытия большой картинки
+const popupBigImg = document.querySelector('.popup_big-img');
+let placeImg = document.querySelectorAll('.place__image');
+
+function bigImgOpen (item){
+    item.addEventListener('click', (event) =>{
+        console.log(event);
+        openPopup(popupBigImg);
+        popupBigImg.querySelector('.popup__big-img').src = item.src;
+        popupBigImg.querySelector('.popup__big-img-title').textContent = item.alt;
+    }
+    )}
+    
+placeImg.forEach(bigImgOpen);
+
+
+
+//////функция лайков
+let likeButton = document.querySelectorAll('.place__like');
+
+function takeLike (event){
+    event.target.classList.toggle('place__like_active');
+}
+
+function likeHandler (item){
+    item.addEventListener('click', takeLike);
+}
+
+likeButton.forEach(likeHandler)
+
+//функция плавного открытия и закрытия popup
+
+window.addEventListener('load', ()=>{
+    document.querySelectorAll('.popup').forEach((popup) => popup.classList.add('popup_opacity'))
+  })
