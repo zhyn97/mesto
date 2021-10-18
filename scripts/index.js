@@ -36,7 +36,6 @@ function closeButtonHandler(event){
 }
 
 function savePopup(event){
-    console.log(event);
     event.preventDefault();
     nameField.textContent = newName.value;
     occupationField.textContent = newOccupation.value;
@@ -44,7 +43,6 @@ function savePopup(event){
 }
 
 function popupCliclHandler(event){
-    console.log(event.target);
     if (event.target.classList.contains('popup')){
         closePopup();
     }
@@ -151,7 +149,6 @@ let placeImg = document.querySelectorAll('.place__image');
 
 function bigImgOpen (item){
     item.addEventListener('click', (event) =>{
-        console.log(event);
         openPopup(popupBigImg);
         popupBigImg.querySelector('.popup__big-img').src = item.src;
         popupBigImg.querySelector('.popup__big-img-title').textContent = item.alt;
