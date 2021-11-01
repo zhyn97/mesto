@@ -33,10 +33,12 @@
           <div class="popup__container">
               <button class="popup__close opacity-button" type="button"></button>
               <p class="popup__title">Редактировать профиль</p>
-              <form class="popup__form form-name" name="name-data">
-                  <input class="popup__name popup__change-line" type="text" name="name-user">
-                  <input class="popup__occupation popup__change-line" type="text" name="name-occupation">
-                  <button class="popup__save-button" type="submit">Сохранить</button>
+              <form class="popup__form form-name" name="name-data" novalidate>
+                  <input id="name" class="popup__name popup__change-line" type="text" name="name-user" minlength="2" maxlength="40" required>
+                  <span id="name-error" class="error"></span>
+                  <input id="occupation" class="popup__occupation popup__change-line" type="text" name="name-occupation" minlength="2" maxlength="200" required>
+                  <span id="occupation-error" class="error"></span>
+                  <button class="popup__save-button" type="submit" disabled>Сохранить</button>
               </form>
           </div>
       </div>
@@ -46,10 +48,12 @@
         <div class="popup__container">
             <button class="popup__close opacity-button" type="button"></button>
             <p class="popup__title">Новое место</p>
-            <form class="popup__form" name="newcards">
-                <input class="popup__change-line name-new-place" type="text" name="namecard" placeholder="Название">
-                <input class="popup__change-line link-new-place" type="text" name="linkcard" placeholder="Ссылка на картинку">
-                <button class="popup__save-button" type="submit">Создать</button>
+            <form class="popup__form" name="newcards" novalidate>
+                <input id="citi-name" class="popup__change-line name-new-place" type="text" name="namecard" placeholder="Название" minlength="2" maxlength="30" required>
+                <span id="citi-name-error" class="error"></span>
+                <input id="city-link" class="popup__change-line link-new-place" type="url" name="linkcard" placeholder="Ссылка на картинку" required>
+                <span id="city-link-error" class="error"></span>
+                <button class="popup__save-button" type="submit" disabled>Создать</button>
             </form>
         </div>
       </div>

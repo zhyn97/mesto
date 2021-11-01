@@ -21,9 +21,15 @@ function closePopup() {
 }
 function editButtonHandler(){
     openPopup(popupEdit);
+    valueNameControl();
+}
+
+function valueNameControl(){
     newName.value = nameField.textContent;
     newOccupation.value = occupationField.textContent;
 }
+
+valueNameControl();
 
 function addButtonHandler(){
     openPopup(popupAdd);
@@ -157,3 +163,66 @@ formNewCard.addEventListener('submit', addNewCard);
 window.addEventListener('load', ()=>{
     document.querySelectorAll('.popup').forEach((popup) => popup.classList.add('popup_opacity'))
   })
+
+
+  //Валидация форм
+
+const config = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__change-line',
+  inputErrorClass: 'popup__change-line_state_invalid',
+  buttonSelector: '.popup__save-button',
+  buttonDisabledClss: 'popup__save-button_state_disabled'
+}
+
+function enableValidator(validConfig){
+  const forms = [...document.querySelectorAll(validConfig.formSelector)];
+  forms.forEach((form) => setFormListeners(form, validConfig));
+}
+
+function setFormListeners(form, config){
+  //form.addEventListener('submit', preEvtDefault)
+  form.addEventListener('input', () => checkSaveButton(form, config))
+  const inputs = [...form.querySelectorAll(config.inputSelector)]
+  inputs.forEach(inputElement => {
+      inputElement.addEventListener('input', () => handleValidator(inputElement, form, config))
+  })
+
+  checkSaveButton(form, config);
+}
+
+function checkSaveButton(form, config){
+    const button = form.querySelector(config.buttonSelector);
+
+    button.disabled = !form.checkValidity();
+    button.classList.toggle(config.buttonDisabledClss, !form.checkValidity());
+}
+
+//function preEvtDefault (event){
+//    event.preventDefault();
+//}
+
+function handleValidator(input, form, config){
+ if(!input.validity.valid){
+    showError(input, form, config);
+ }
+ else{
+    dontShowError (input, form, config);
+ }
+}  
+
+function showError (input, form, config){
+    const errorElement = form.querySelector(`#${input.id}-error`);
+    input.classList.add(config.inputErrorClass);
+
+    errorElement.textContent = input.validationMessage;
+}
+
+function dontShowError (input, form, config){
+    const errorElement = form.querySelector(`#${input.id}-error`);
+    input.classList.remove(config.inputErrorClass);
+    
+    errorElement.textContent = '';
+}
+
+enableValidator(config)

@@ -1,0 +1,20 @@
+.error{
+    display: block;
+    margin-left: 8%;
+    margin-bottom: 13px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 15px;
+    color: #FF0000;
+}
+
+.error:last-of-type{
+    margin-bottom: 31px;
+}
+
+@media screen and (max-width: 550px) {
+    .error-line:last-of-type{
+        margin-bottom: 45px;
+    }
+}
