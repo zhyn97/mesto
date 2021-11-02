@@ -14,6 +14,7 @@ const popupAdd = document.querySelector('.popup-add');
 
 function openPopup(element){
     element.classList.add('popup_active');
+    document.addEventListener('keydown', escButtonHandler);
 }
 
 function closePopup() {
@@ -33,6 +34,7 @@ valueNameControl();
 
 function addButtonHandler(){
     openPopup(popupAdd);
+    enableValidator(config);
 }
 
 function closeButtonHandler(event){
@@ -54,7 +56,11 @@ function popupCliclHandler(event){
     }
 }
 
-
+function escButtonHandler (event){
+    if(event.keyCode == 27){
+        closePopup();
+    }
+}
 
 editButton.addEventListener('click', editButtonHandler);
 addButton.addEventListener('click', addButtonHandler);
@@ -181,7 +187,6 @@ function enableValidator(validConfig){
 }
 
 function setFormListeners(form, config){
-  //form.addEventListener('submit', preEvtDefault)
   form.addEventListener('input', () => checkSaveButton(form, config))
   const inputs = [...form.querySelectorAll(config.inputSelector)]
   inputs.forEach(inputElement => {
@@ -198,9 +203,6 @@ function checkSaveButton(form, config){
     button.classList.toggle(config.buttonDisabledClss, !form.checkValidity());
 }
 
-//function preEvtDefault (event){
-//    event.preventDefault();
-//}
 
 function handleValidator(input, form, config){
  if(!input.validity.valid){
@@ -225,4 +227,4 @@ function dontShowError (input, form, config){
     errorElement.textContent = '';
 }
 
-enableValidator(config)
+enableValidator(config);
