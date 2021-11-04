@@ -10,6 +10,7 @@ const newName = document.querySelector('.popup__name');
 const newOccupation = document.querySelector('.popup__occupation');
 const popupEdit = document.querySelector('.popup-edit');
 const popupAdd = document.querySelector('.popup-add');
+const allForms = document.querySelectorAll('.popup__form');
 
 
 function openPopup(element){
@@ -18,7 +19,10 @@ function openPopup(element){
 }
 
 function closePopup() {
-    popups.forEach(el => el.classList.remove('popup_active'))
+    allForms.forEach(el => el.reset());
+    popups.forEach(el => el.classList.remove('popup_active'));
+
+    hidenError(config)
 }
 function editButtonHandler(){
     openPopup(popupEdit);
@@ -34,7 +38,6 @@ valueNameControl();
 
 function addButtonHandler(){
     openPopup(popupAdd);
-    enableValidator(config);
 }
 
 function closeButtonHandler(event){
@@ -57,10 +60,11 @@ function popupCliclHandler(event){
 }
 
 function escButtonHandler (event){
-    if(event.keyCode == 27){
+    if(event.code == 'Escape'){
         closePopup();
     }
 }
+
 
 editButton.addEventListener('click', editButtonHandler);
 addButton.addEventListener('click', addButtonHandler);
@@ -106,23 +110,25 @@ const initialCards = [
 const places = document.querySelector('.places');
 const template = document.querySelector('.template').content;
 const popupBigImg = document.querySelector('.popup_big-img');
-let placeImgs = document.querySelectorAll('.place__image');
-let likeButtons = document.querySelectorAll('.place__like');
 
 
 function creatCard(item){
     const element = template.querySelector('.place').cloneNode(true);
+    const placeImg = element.querySelector('.place__image');
     element.querySelector('.place__title').textContent = item.name;
-    element.querySelector('.place__image').src = item.link;
-    element.querySelector('.place__image').alt = item.name;
+    placeImg.src = item.link;
+    placeImg.alt = item.name;
     //функция удаления карточек
     element.querySelector('.place__trash').addEventListener('click', (event) => {
         event.target.closest('.place').remove();
     })
     //функиця открытия большой картинки
-    element.querySelector('.place__image').addEventListener('click', (event) => {
+    placeImg.addEventListener('click', (event) => {
         openPopup(popupBigImg);
-        popupBigImg.querySelector('.popup__big-img').src = event.target.currentSrc;
+        const bigImg = popupBigImg.querySelector('.popup__big-img');
+
+        bigImg.src = event.target.currentSrc;
+        bigImg.alt = event.target.parentNode.querySelector('.place__title').textContent;
         popupBigImg.querySelector('.popup__big-img-title').textContent = event.target.alt;
     })
     //////функция лайков
@@ -171,60 +177,16 @@ window.addEventListener('load', ()=>{
   })
 
 
-  //Валидация форм
 
-const config = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__change-line',
-  inputErrorClass: 'popup__change-line_state_invalid',
-  buttonSelector: '.popup__save-button',
-  buttonDisabledClss: 'popup__save-button_state_disabled'
-}
+//вызов функции валидации
 
-function enableValidator(validConfig){
-  const forms = [...document.querySelectorAll(validConfig.formSelector)];
-  forms.forEach((form) => setFormListeners(form, validConfig));
-}
+  const config = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__change-line',
+    inputErrorClass: 'popup__change-line_state_invalid',
+    buttonSelector: '.popup__save-button',
+    buttonDisabledClss: 'popup__save-button_state_disabled'
+  }
+  
 
-function setFormListeners(form, config){
-  form.addEventListener('input', () => checkSaveButton(form, config))
-  const inputs = [...form.querySelectorAll(config.inputSelector)]
-  inputs.forEach(inputElement => {
-      inputElement.addEventListener('input', () => handleValidator(inputElement, form, config))
-  })
-
-  checkSaveButton(form, config);
-}
-
-function checkSaveButton(form, config){
-    const button = form.querySelector(config.buttonSelector);
-
-    button.disabled = !form.checkValidity();
-    button.classList.toggle(config.buttonDisabledClss, !form.checkValidity());
-}
-
-
-function handleValidator(input, form, config){
- if(!input.validity.valid){
-    showError(input, form, config);
- }
- else{
-    dontShowError (input, form, config);
- }
-}  
-
-function showError (input, form, config){
-    const errorElement = form.querySelector(`#${input.id}-error`);
-    input.classList.add(config.inputErrorClass);
-
-    errorElement.textContent = input.validationMessage;
-}
-
-function dontShowError (input, form, config){
-    const errorElement = form.querySelector(`#${input.id}-error`);
-    input.classList.remove(config.inputErrorClass);
-    
-    errorElement.textContent = '';
-}
-
-enableValidator(config);
+  enableValidator(config);

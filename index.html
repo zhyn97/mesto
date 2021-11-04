@@ -48,7 +48,7 @@
         <div class="popup__container">
             <button class="popup__close opacity-button" type="button"></button>
             <p class="popup__title">Новое место</p>
-            <form class="popup__form" name="newcards" novalidate>
+            <form class="popup__form form-place" name="newcards" novalidate>
                 <input id="citi-name" class="popup__change-line name-new-place" type="text" name="namecard" placeholder="Название" minlength="2" maxlength="30" required>
                 <span id="citi-name-error" class="error"></span>
                 <input id="city-link" class="popup__change-line link-new-place" type="url" name="linkcard" placeholder="Ссылка на картинку" required>
@@ -78,6 +78,7 @@
         </div>
       </template>
     </div>
+    <script src="./scripts/validate.js"></script>
     <script src="./scripts/index.js"></script>
 </body>
 </html>
