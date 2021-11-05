@@ -48,11 +48,14 @@
   }
   
 
-  function hidenError(config){
-    const errors = document.querySelectorAll('.error');
-    const inputs = document.querySelectorAll('.popup__change-line');
+  function hidenError(form, config){
+    const errors = form.querySelectorAll(config.errorSelector);
+    const inputs = form.querySelectorAll(config.inputSelector);
     errors.forEach(el => el.textContent = '');
     inputs.forEach(el => el.classList.remove(config.inputErrorClass));
 }
+
+
+
   
   

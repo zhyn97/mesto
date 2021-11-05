@@ -4,6 +4,7 @@ const popups = document.querySelectorAll('.popup');
 const closeButtons = document.querySelectorAll('.popup__close');
 const saveButton = document.querySelector('.popup__save-button');
 const formName = document.querySelector('.form-name');
+const formPlace = document.querySelector('.form-place');
 const nameField = document.querySelector('.profile__name');
 const occupationField = document.querySelector('.profile__occupation');
 const newName = document.querySelector('.popup__name');
@@ -19,14 +20,15 @@ function openPopup(element){
 }
 
 function closePopup() {
-    allForms.forEach(el => el.reset());
     popups.forEach(el => el.classList.remove('popup_active'));
-
-    hidenError(config)
 }
+
+
 function editButtonHandler(){
-    openPopup(popupEdit);
+    hidenError(popupEdit, config);
     valueNameControl();
+    checkSaveButton(formName, config);
+    openPopup(popupEdit);
 }
 
 function valueNameControl(){
@@ -37,6 +39,10 @@ function valueNameControl(){
 valueNameControl();
 
 function addButtonHandler(){
+    const addForm = popupAdd.querySelector('.form-place');
+    addForm.reset();
+    hidenError(popupAdd, config);
+    checkSaveButton(formPlace, config);
     openPopup(popupAdd);
 }
 
@@ -185,7 +191,11 @@ window.addEventListener('load', ()=>{
     inputSelector: '.popup__change-line',
     inputErrorClass: 'popup__change-line_state_invalid',
     buttonSelector: '.popup__save-button',
-    buttonDisabledClss: 'popup__save-button_state_disabled'
+    buttonDisabledClss: 'popup__save-button_state_disabled',
+    errorSelector: '.error',
+    buttonAddClass: 'profile__add-button',
+    formAddSelector: '.form-place',
+    formEditSelector: 'form-name'
   }
   
 
