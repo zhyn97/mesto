@@ -20,6 +20,7 @@ function openPopup(element){
 }
 
 function closePopup() {
+    document.removeEventListener('keydown', escButtonHandler);
     popups.forEach(el => el.classList.remove('popup_active'));
 }
 
