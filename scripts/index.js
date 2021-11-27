@@ -2,7 +2,6 @@ const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
 const popups = document.querySelectorAll('.popup');
 const closeButtons = document.querySelectorAll('.popup__close');
-const saveButton = document.querySelector('.popup__save-button');
 const formName = document.querySelector('.form-name');
 const formPlace = document.querySelector('.form-place');
 const nameField = document.querySelector('.profile__name');
@@ -11,7 +10,7 @@ const newName = document.querySelector('.popup__name');
 const newOccupation = document.querySelector('.popup__occupation');
 const popupEdit = document.querySelector('.popup-edit');
 const popupAdd = document.querySelector('.popup-add');
-const allForms = document.querySelectorAll('.popup__form');
+
 
 
 function openPopup(element){
@@ -47,12 +46,6 @@ function addButtonHandler(){
     openPopup(popupAdd);
 }
 
-function closeButtonHandler(event){
-    if(event.target.classList.contains('popup__close')){
-        closePopup();
-    }
-}
-
 function savePopup(event){
     event.preventDefault();
     nameField.textContent = newName.value;
@@ -82,12 +75,48 @@ formName.addEventListener('submit', savePopup);
 popups.forEach(popups => popups.addEventListener('mouseup',popupCliclHandler));
 
 
+//функция плавного открытия и закрытия popup
+
+window.addEventListener('load', ()=>{
+    document.querySelectorAll('.popup').forEach((popup) => popup.classList.add('popup_opacity'))
+  })
 
 
 
-////////////////////////////////////////////////функция добавления карточек
+//функиця открытия большой картинки
+function openBigImg (event) {
+  const popupBigImg = document.querySelector(config.popupBigImg);
+  openPopup(popupBigImg);
+  const bigImg = popupBigImg.querySelector('.popup__big-img');
 
-const initialCards = [
+  bigImg.src = event.target.currentSrc;
+  bigImg.alt = event.target.parentNode.querySelector('.place__title').textContent;
+  popupBigImg.querySelector('.popup__big-img-title').textContent = event.target.alt;
+}
+
+  const config = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__change-line',
+    inputErrorClass: 'popup__change-line_state_invalid',
+    buttonSelector: '.popup__save-button',
+    buttonDisabledClss: 'popup__save-button_state_disabled',
+    errorSelector: '.error',
+    buttonAddClass: 'profile__add-button',
+    formAddSelector: '.form-place',
+    formEditSelector: 'form-name',
+    //конфиг для Card
+    place: '.place',
+    places: '.places',
+    template: '.template',
+    popupBigImg: '.popup_big-img',
+    formNewPlace: '.form-place',
+  }
+  
+
+  // работа с классом Card 
+
+
+  const initialCards = [
     {
       name: 'Архыз',
       link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
@@ -114,90 +143,46 @@ const initialCards = [
     }
   ];
 
-const places = document.querySelector('.places');
-const template = document.querySelector('.template').content;
-const popupBigImg = document.querySelector('.popup_big-img');
+  import CardList from "../components/CardsList.js";
+  import Card from "../components/Card.js";
+  import CardAdd from "../components/CardAdd.js";
+  import FormValidate from "../components/FormValidate.js";
+
+    const template = document.querySelector('.template').content;
+    const cardsList = new CardList (config, initialCards, createCard);
+    const cardAdd = new CardAdd (config, addItem, closePopup);
+    cardAdd.addListener();
 
 
-function creatCard(item){
-    const element = template.querySelector('.place').cloneNode(true);
-    const placeImg = element.querySelector('.place__image');
-    element.querySelector('.place__title').textContent = item.name;
-    placeImg.src = item.link;
-    placeImg.alt = item.name;
-    //функция удаления карточек
-    element.querySelector('.place__trash').addEventListener('click', (event) => {
-        event.target.closest('.place').remove();
+    function createCard(item) {
+      const card = new Card(config, item, template, openBigImg);
+      return card;
+    }
+
+    
+    function addItem(item){
+      cardsList.addItem(item);
+    }
+
+
+    initialCards.forEach((item)=>{
+        cardsList.addItem(item);
     })
-    //функиця открытия большой картинки
-    placeImg.addEventListener('click', (event) => {
-        openPopup(popupBigImg);
-        const bigImg = popupBigImg.querySelector('.popup__big-img');
 
-        bigImg.src = event.target.currentSrc;
-        bigImg.alt = event.target.parentNode.querySelector('.place__title').textContent;
-        popupBigImg.querySelector('.popup__big-img-title').textContent = event.target.alt;
-    })
-    //////функция лайков
-    element.querySelector('.place__like').addEventListener('click', (event) => {
-        event.target.classList.toggle('place__like_active')
-    });
-    
-    return element;
-}
+    //работа с классом FormValidate
+    const formValidate = new FormValidate(config, formName, checkSaveButton)
+    formValidate.enableValidator();
 
-function renderCard(item){
-    const element = creatCard(item);
-    places.prepend(element);
-}
-
-initialCards.forEach(renderCard);
-
-////добавление новых элементов
-
-const formNewCard = document.querySelector('.popup-add');
-const namePlace = document.querySelector('.name-new-place');
-const linkPlace = document.querySelector('.link-new-place');
-
-
-function addNewCard(event) {
-    event.preventDefault();
-    
-    const name = namePlace.value;
-    const link = linkPlace.value;
-    const item = {
-        name: name,
-        link: link 
-    };
-    
-    renderCard(item);
-    event.target.reset();
-    closePopup();
-}
-
-formNewCard.addEventListener('submit', addNewCard);
-
-//функция плавного открытия и закрытия popup
-
-window.addEventListener('load', ()=>{
-    document.querySelectorAll('.popup').forEach((popup) => popup.classList.add('popup_opacity'))
-  })
-
-
-
-//вызов функции валидации
-
-  const config = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__change-line',
-    inputErrorClass: 'popup__change-line_state_invalid',
-    buttonSelector: '.popup__save-button',
-    buttonDisabledClss: 'popup__save-button_state_disabled',
-    errorSelector: '.error',
-    buttonAddClass: 'profile__add-button',
-    formAddSelector: '.form-place',
-    formEditSelector: 'form-name'
+    function hidenError(form, config){
+      const errors = form.querySelectorAll(config.errorSelector);
+      const inputs = form.querySelectorAll(config.inputSelector);
+      errors.forEach(el => el.textContent = '');
+      inputs.forEach(el => el.classList.remove(config.inputErrorClass));
   }
-  
 
-  enableValidator(config);
+    function checkSaveButton(form, config){
+        const button = form.querySelector(config.buttonSelector);
+    
+        button.disabled = !form.checkValidity();
+        button.classList.toggle(config.buttonDisabledClss, !form.checkValidity());
+    }
