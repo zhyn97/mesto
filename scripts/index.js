@@ -30,9 +30,7 @@ function closePopup() {
 
 
 function editButtonHandler(){
-    hidenError(popupEdit, validationConfig);
     setProfileInputs();
-    checkSaveButton(formName, validationConfig);
     openPopup(popupEdit);
 }
 
@@ -45,12 +43,10 @@ function setProfileInputs(){
 function addButtonHandler(){
     const addForm = popupAdd.querySelector('.form-place');
     addForm.reset();
-    hidenError(popupAdd, validationConfig);
-    checkSaveButton(formPlace, validationConfig);
     openPopup(popupAdd);
 }
 
-function saveNamePopups(event){
+function saveNamePopup(event){
     event.preventDefault();
     nameField.textContent = newName.value;
     occupationField.textContent = newOccupation.value;
@@ -75,7 +71,7 @@ addButton.addEventListener('click', addButtonHandler);
 closeButtons.forEach(closeButton =>
     closeButton.addEventListener('click', closePopup)
     );    
-formName.addEventListener('submit', saveNamePopups);
+formName.addEventListener('submit', saveNamePopup);
 popups.forEach(popups => popups.addEventListener('mouseup',popupCliclHandler));
 
 
@@ -89,7 +85,7 @@ window.addEventListener('load', ()=>{
 
 //функиця открытия большой картинки
 function openBigImg (event) {
-  const popupBigImg = document.querySelector(config.popupBigImg);
+  const popupBigImg = document.querySelector(cardsConfig.popupBigImg);
   const bigImg = popupBigImg.querySelector('.popup__big-img');
 
   bigImg.src = event.target.currentSrc;
@@ -103,9 +99,11 @@ function openBigImg (event) {
     inputSelector: '.popup__change-line',
     inputErrorClass: 'popup__change-line_state_invalid',
     buttonSelector: '.popup__save-button',
-    buttonDisabledClss: 'popup__save-button_state_disabled',
+    buttonDisabledClass: 'popup__save-button_state_disabled',
     errorSelector: '.error',
     buttonAddClass: 'profile__add-button',
+    buttonEditName: '.profile__edit-button',
+    buttonAddPlace: '.profile__add-button',
     formAddSelector: '.form-place',
     formEditSelector: 'form-name',
   }
@@ -171,19 +169,7 @@ function openBigImg (event) {
     })
 
     //работа с классом FormValidator
-    const formValidator = new FormValidator(validationConfig, formName, checkSaveButton)
-    formValidator.enableValidator();
-
-    function hidenError(form, validationConfig){
-      const errors = form.querySelectorAll(validationConfig.errorSelector);
-      const inputs = form.querySelectorAll(validationConfig.inputSelector);
-      errors.forEach(el => el.textContent = '');
-      inputs.forEach(el => el.classList.remove(validationConfig.inputErrorClass));
-  }
-
-    function checkSaveButton(form, validationConfig){
-        const button = form.querySelector(validationConfig.buttonSelector);
-    
-        button.disabled = !form.checkValidity();
-        button.classList.toggle(validationConfig.buttonDisabledClss, !form.checkValidity());
-    }
+    const formNameValidator = new FormValidator(validationConfig, formName);
+    const formPlaceValidator = new FormValidator(validationConfig, formPlace);
+    formNameValidator.enableValidator();
+    formPlaceValidator.enableValidator();
