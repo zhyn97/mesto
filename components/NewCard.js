@@ -1,4 +1,4 @@
-class CardAdd {
+class NewCard {
     constructor (config, addItem, closePopup){
         this._config = config;
         this._form = document.querySelector('.form-place');
@@ -30,4 +30,4 @@ class CardAdd {
     }
 }
 
-export default CardAdd;
+export default NewCard;

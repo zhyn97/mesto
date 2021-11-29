@@ -1,3 +1,8 @@
+import CardList from "../components/CardsList.js";
+import Card from "../components/Card.js";
+import NewCard from "../components/NewCard.js";
+import FormValidator from "../components/FormValidator.js";
+
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
 const popups = document.querySelectorAll('.popup');
@@ -25,28 +30,27 @@ function closePopup() {
 
 
 function editButtonHandler(){
-    hidenError(popupEdit, config);
-    valueNameControl();
-    checkSaveButton(formName, config);
+    hidenError(popupEdit, validationConfig);
+    setProfileInputs();
+    checkSaveButton(formName, validationConfig);
     openPopup(popupEdit);
 }
 
-function valueNameControl(){
+function setProfileInputs(){
     newName.value = nameField.textContent;
     newOccupation.value = occupationField.textContent;
 }
 
-valueNameControl();
 
 function addButtonHandler(){
     const addForm = popupAdd.querySelector('.form-place');
     addForm.reset();
-    hidenError(popupAdd, config);
-    checkSaveButton(formPlace, config);
+    hidenError(popupAdd, validationConfig);
+    checkSaveButton(formPlace, validationConfig);
     openPopup(popupAdd);
 }
 
-function savePopup(event){
+function saveNamePopups(event){
     event.preventDefault();
     nameField.textContent = newName.value;
     occupationField.textContent = newOccupation.value;
@@ -68,10 +72,10 @@ function escButtonHandler (event){
 
 editButton.addEventListener('click', editButtonHandler);
 addButton.addEventListener('click', addButtonHandler);
-closeButtons.forEach(closeButtons =>
-    closeButtons.addEventListener('click', closePopup)
+closeButtons.forEach(closeButton =>
+    closeButton.addEventListener('click', closePopup)
     );    
-formName.addEventListener('submit', savePopup);
+formName.addEventListener('submit', saveNamePopups);
 popups.forEach(popups => popups.addEventListener('mouseup',popupCliclHandler));
 
 
@@ -86,15 +90,15 @@ window.addEventListener('load', ()=>{
 //функиця открытия большой картинки
 function openBigImg (event) {
   const popupBigImg = document.querySelector(config.popupBigImg);
-  openPopup(popupBigImg);
   const bigImg = popupBigImg.querySelector('.popup__big-img');
 
   bigImg.src = event.target.currentSrc;
   bigImg.alt = event.target.parentNode.querySelector('.place__title').textContent;
   popupBigImg.querySelector('.popup__big-img-title').textContent = event.target.alt;
+  openPopup(popupBigImg);
 }
 
-  const config = {
+  const validationConfig = {
     formSelector: '.popup__form',
     inputSelector: '.popup__change-line',
     inputErrorClass: 'popup__change-line_state_invalid',
@@ -104,14 +108,15 @@ function openBigImg (event) {
     buttonAddClass: 'profile__add-button',
     formAddSelector: '.form-place',
     formEditSelector: 'form-name',
-    //конфиг для Card
+  }
+  
+  const cardsConfig = {
     place: '.place',
     places: '.places',
     template: '.template',
     popupBigImg: '.popup_big-img',
     formNewPlace: '.form-place',
   }
-  
 
   // работа с классом Card 
 
@@ -143,19 +148,15 @@ function openBigImg (event) {
     }
   ];
 
-  import CardList from "../components/CardsList.js";
-  import Card from "../components/Card.js";
-  import CardAdd from "../components/CardAdd.js";
-  import FormValidate from "../components/FormValidate.js";
 
     const template = document.querySelector('.template').content;
-    const cardsList = new CardList (config, initialCards, createCard);
-    const cardAdd = new CardAdd (config, addItem, closePopup);
-    cardAdd.addListener();
+    const cardsList = new CardList (cardsConfig, createCard);
+    const newCard = new NewCard (cardsConfig, addItem, closePopup);
+    newCard.addListener();
 
 
     function createCard(item) {
-      const card = new Card(config, item, template, openBigImg);
+      const card = new Card(cardsConfig, item, template, openBigImg);
       return card;
     }
 
@@ -169,20 +170,20 @@ function openBigImg (event) {
         cardsList.addItem(item);
     })
 
-    //работа с классом FormValidate
-    const formValidate = new FormValidate(config, formName, checkSaveButton)
-    formValidate.enableValidator();
+    //работа с классом FormValidator
+    const formValidator = new FormValidator(validationConfig, formName, checkSaveButton)
+    formValidator.enableValidator();
 
-    function hidenError(form, config){
-      const errors = form.querySelectorAll(config.errorSelector);
-      const inputs = form.querySelectorAll(config.inputSelector);
+    function hidenError(form, validationConfig){
+      const errors = form.querySelectorAll(validationConfig.errorSelector);
+      const inputs = form.querySelectorAll(validationConfig.inputSelector);
       errors.forEach(el => el.textContent = '');
-      inputs.forEach(el => el.classList.remove(config.inputErrorClass));
+      inputs.forEach(el => el.classList.remove(validationConfig.inputErrorClass));
   }
 
-    function checkSaveButton(form, config){
-        const button = form.querySelector(config.buttonSelector);
+    function checkSaveButton(form, validationConfig){
+        const button = form.querySelector(validationConfig.buttonSelector);
     
         button.disabled = !form.checkValidity();
-        button.classList.toggle(config.buttonDisabledClss, !form.checkValidity());
+        button.classList.toggle(validationConfig.buttonDisabledClss, !form.checkValidity());
     }
