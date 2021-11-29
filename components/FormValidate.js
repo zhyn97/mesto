@@ -18,7 +18,7 @@ class FormValidate{
         
         errorElement.textContent = '';
     }
-
+//adw
     _handleValidator(input, form, config){
         if(!input.validity.valid){
            this._showError(input, form, config);
