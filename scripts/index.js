@@ -110,24 +110,6 @@ function openBigImg (event) {
   openPopup(popupBigImg);
 }
 
-  const validationConfig = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__change-line',
-    inputErrorClass: 'popup__change-line_state_invalid',
-    buttonSelector: '.popup__save-button',
-    buttonDisabledClass: 'popup__save-button_state_disabled',
-    buttonEditName: '.profile__edit-button',
-    buttonAddPlace: '.profile__add-button',
-  }
-  
-  const cardsConfig = {
-    place: '.place',
-    places: '.places',
-    template: '.template',
-    popupBigImg: '.popup_big-img',
-    formNewPlace: '.form-place',
-  }
-
   
 
   // работа с классом Card 
@@ -169,11 +151,6 @@ function openBigImg (event) {
       const newItem = card.generateItem();
       return newItem;
     }
-
-    
-    // function addItem(item){
-    //   cardsList.addItem(item);
-    // }
 
 
     initialCards.forEach((item)=>{
