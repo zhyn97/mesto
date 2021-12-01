@@ -1,6 +1,5 @@
-import CardList from "../components/CardsList.js";
+import Container from "../components/Container.js";
 import Card from "../components/Card.js";
-import NewCard from "../components/NewCard.js";
 import FormValidator from "../components/FormValidator.js";
 
 const editButton = document.querySelector('.profile__edit-button');
@@ -15,7 +14,8 @@ const newName = document.querySelector('.popup__name');
 const newOccupation = document.querySelector('.popup__occupation');
 const popupEdit = document.querySelector('.popup-edit');
 const popupAdd = document.querySelector('.popup-add');
-
+const newPlaceName = document.querySelector('.name-new-place');
+const newPlaceLink = document.querySelector('.link-new-place');
 
 
 function openPopup(element){
@@ -31,6 +31,7 @@ function closePopup() {
 
 function editButtonHandler(){
     setProfileInputs();
+    formNameValidator.checkSaveButton();
     openPopup(popupEdit);
 }
 
@@ -43,6 +44,7 @@ function setProfileInputs(){
 function addButtonHandler(){
     const addForm = popupAdd.querySelector('.form-place');
     addForm.reset();
+    formPlaceValidator.checkSaveButton();
     openPopup(popupAdd);
 }
 
@@ -52,6 +54,19 @@ function saveNamePopup(event){
     occupationField.textContent = newOccupation.value;
     closePopup();
 }
+
+function saveNewCard(event){
+  event.preventDefault();
+  const name = newPlaceName.value;
+  const link = newPlaceLink.value;
+  const item = {
+      name,
+      link
+  };
+  
+  container.addItem(item);
+  closePopup();
+  }
 
 function popupCliclHandler(event){
     if (event.target.classList.contains('popup')){
@@ -72,6 +87,7 @@ closeButtons.forEach(closeButton =>
     closeButton.addEventListener('click', closePopup)
     );    
 formName.addEventListener('submit', saveNamePopup);
+formPlace.addEventListener('submit', saveNewCard);
 popups.forEach(popups => popups.addEventListener('mouseup',popupCliclHandler));
 
 
@@ -100,12 +116,8 @@ function openBigImg (event) {
     inputErrorClass: 'popup__change-line_state_invalid',
     buttonSelector: '.popup__save-button',
     buttonDisabledClass: 'popup__save-button_state_disabled',
-    errorSelector: '.error',
-    buttonAddClass: 'profile__add-button',
     buttonEditName: '.profile__edit-button',
     buttonAddPlace: '.profile__add-button',
-    formAddSelector: '.form-place',
-    formEditSelector: 'form-name',
   }
   
   const cardsConfig = {
@@ -116,8 +128,9 @@ function openBigImg (event) {
     formNewPlace: '.form-place',
   }
 
-  // работа с классом Card 
+  
 
+  // работа с классом Card 
 
   const initialCards = [
     {
@@ -145,18 +158,16 @@ function openBigImg (event) {
       link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
     }
   ];
-
-
+  
+    const places = document.querySelector('.places');
     const template = document.querySelector('.template').content;
-    const cardsList = new CardList (cardsConfig, createCard);
-    //const newCard = new NewCard (cardsConfig, addItem, closePopup);
-    //newCard.addListener();
+    const container = new Container (places, generateItem);
 
 
-    function createCard(item) {
+    function generateItem(item) {
       const card = new Card(cardsConfig, item, template, openBigImg);
-      card.generateCard();
-      return card;
+      const newItem = card.generateItem();
+      return newItem;
     }
 
     
@@ -166,7 +177,7 @@ function openBigImg (event) {
 
 
     initialCards.forEach((item)=>{
-        cardsList.addItem(item);
+      container.addItem(item);
     })
 
     //работа с классом FormValidator

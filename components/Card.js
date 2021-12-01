@@ -22,7 +22,7 @@ class Card{
         this._view.querySelector('.place__image').addEventListener('click', this._openBigImg);
     }
 
-    generateCard(){
+    generateItem(){
         this._view.querySelector('.place__title').textContent = this._item.name;
         this._view.querySelector('.place__image').src = this._item.link;
         this._view.querySelector('.place__image').alt = this._item.name;
