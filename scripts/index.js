@@ -149,19 +149,20 @@ function openBigImg (event) {
 
     const template = document.querySelector('.template').content;
     const cardsList = new CardList (cardsConfig, createCard);
-    const newCard = new NewCard (cardsConfig, addItem, closePopup);
-    newCard.addListener();
+    //const newCard = new NewCard (cardsConfig, addItem, closePopup);
+    //newCard.addListener();
 
 
     function createCard(item) {
       const card = new Card(cardsConfig, item, template, openBigImg);
+      card.generateCard();
       return card;
     }
 
     
-    function addItem(item){
-      cardsList.addItem(item);
-    }
+    // function addItem(item){
+    //   cardsList.addItem(item);
+    // }
 
 
     initialCards.forEach((item)=>{

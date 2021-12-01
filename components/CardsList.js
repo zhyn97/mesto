@@ -6,8 +6,7 @@ class CardList{
     }
 
     addItem(item) {
-        const card = this._createCard(item);
-        const view = card.generateCard();
+        const view = this._createCard(item);
         const places = document.querySelector(this._config.places);
         places.prepend(view);
     }

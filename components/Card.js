@@ -16,7 +16,7 @@ class Card{
         event.target.classList.toggle('place__like_active');
     }
 
-    _setEventListener(){
+    _setEventListeners(){
         this._view.querySelector('.place__trash').addEventListener('click', this._remove);
         this._view.querySelector('.place__like').addEventListener('click', this._like);
         this._view.querySelector('.place__image').addEventListener('click', this._openBigImg);
@@ -26,7 +26,7 @@ class Card{
         this._view.querySelector('.place__title').textContent = this._item.name;
         this._view.querySelector('.place__image').src = this._item.link;
         this._view.querySelector('.place__image').alt = this._item.name;
-        this._setEventListener();
+        this._setEventListeners();
 
         return this._view;
     }
