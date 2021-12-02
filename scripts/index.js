@@ -32,6 +32,7 @@ function closePopup() {
 function editButtonHandler(){
     setProfileInputs();
     formNameValidator.checkSaveButton();
+    formName.querySelectorAll('.popup__change-line').forEach(input => {formNameValidator.hideError(input)});
     openPopup(popupEdit);
 }
 
@@ -45,6 +46,7 @@ function addButtonHandler(){
     const addForm = popupAdd.querySelector('.form-place');
     addForm.reset();
     formPlaceValidator.checkSaveButton();
+    formPlace.querySelectorAll('.popup__change-line').forEach(input => {formPlaceValidator.hideError(input)});
     openPopup(popupAdd);
 }
 

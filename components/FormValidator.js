@@ -7,8 +7,6 @@ class FormValidator{
         this._button = form.querySelector(config.buttonSelector);
         this._buttonDisabledClass = config.buttonDisabledClass;
         this._form = form;
-        this._buttonEditname = document.querySelector(config.buttonEditName);
-        this._buttonEditplace = document.querySelector(config.buttonAddPlace);
     }
 
     checkSaveButton(){
@@ -21,26 +19,26 @@ class FormValidator{
         }
     }
 
-    _showError (input){
-        const errorElement = this._form.querySelector(`#${input.id}-error`);
-        input.classList.add(this._inputErrorClass);
-    
-        errorElement.textContent = input.validationMessage;
-    }
-    
-    _hideError (input){
+    hideError (input){
         const errorElement = this._form.querySelector(`#${input.id}-error`);
         input.classList.remove(this._inputErrorClass);
         
         errorElement.textContent = '';
     }
 
+    _showError (input){
+        const errorElement = this._form.querySelector(`#${input.id}-error`);
+        input.classList.add(this._inputErrorClass);
+    
+        errorElement.textContent = input.validationMessage;
+    }
+
     _handleValidator(input){
         if(!input.validity.valid){
-           this._showError(input, this._form);
+           this._showError(input);
         }
         else{
-           this._hideError (input, this._form);
+           this.hideError (input);
         }
        }
 
@@ -48,9 +46,7 @@ class FormValidator{
         this._form.addEventListener('input', () => this.checkSaveButton())
         const inputs = [...this._form.querySelectorAll(this._inputSelector)]
         inputs.forEach(inputElement => {
-            inputElement.addEventListener('input', () => this._handleValidator(inputElement, this._form));
-            this._buttonEditname.addEventListener('click', () => this._hideError(inputElement, this._form));
-            this._buttonEditplace.addEventListener('click', () => this._hideError(inputElement, this._form));
+            inputElement.addEventListener('input', () => this._handleValidator(inputElement));
         })
       }
 

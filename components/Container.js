@@ -1,13 +1,13 @@
  
 class Container{
-    constructor(places, generateItem){
-        this._places = places;
+    constructor(container, generateItem){
+        this._container = container;
         this._generateItem = generateItem;
     }
 
     addItem(item) {
         const view = this._generateItem(item);
-        this._places.prepend(view);
+        this._container.prepend(view);
     }
     
 }
