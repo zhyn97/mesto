@@ -31,8 +31,7 @@ function closePopup() {
 
 function editButtonHandler(){
     setProfileInputs();
-    formNameValidator.checkSaveButton();
-    formNameValidator.hideInputEroor()
+    formNameValidator.checkSaveButtonAndClearInputs();
     openPopup(popupEdit);
 }
 
@@ -45,8 +44,7 @@ function setProfileInputs(){
 function addButtonHandler(){
     const addForm = popupAdd.querySelector('.form-place');
     addForm.reset();
-    formPlaceValidator.checkSaveButton();
-    formPlaceValidator.hideInputEroor();
+    formPlaceValidator.checkSaveButtonAndClearInputs();
     openPopup(popupAdd);
 }
 

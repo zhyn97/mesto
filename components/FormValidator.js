@@ -10,11 +10,12 @@ class FormValidator{
         this._inputList = Array.from(this._form.querySelectorAll(this._inputSelector));
     }
 
-    hideInputEroor(){
+    checkSaveButtonAndClearInputs(){
         this._inputList.forEach((input) => this._hideError(input));
+        this._checkSaveButton();
     }
 
-    checkSaveButton(){
+    _checkSaveButton(){
         if (this._form.checkValidity()) {
             this._button.removeAttribute("disabled");
             this._button.classList.remove(this._buttonDisabledClass);
@@ -48,7 +49,7 @@ class FormValidator{
        }
 
     _setFormListeners(){
-        this._form.addEventListener('input', () => this.checkSaveButton());
+        this._form.addEventListener('input', () => this._checkSaveButton());
         const inputs = [...this._form.querySelectorAll(this._inputSelector)];
         inputs.forEach(inputElement => {
             inputElement.addEventListener('input', () => this._handleValidator(inputElement));
