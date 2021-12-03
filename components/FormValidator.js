@@ -10,18 +10,21 @@ class FormValidator{
         this._inputList = Array.from(this._form.querySelectorAll(this._inputSelector));
     }
 
+    hideInputEroor(){
+        this._inputList.forEach((input) => this._hideError(input));
+    }
+
     checkSaveButton(){
         if (this._form.checkValidity()) {
             this._button.removeAttribute("disabled");
             this._button.classList.remove(this._buttonDisabledClass);
-            this._inputList.forEach((input) => this.hideError(input));
         } else {
             this._button.setAttribute("disabled", "disabled");
             this._button.classList.add(this._buttonDisabledClass);
         }
     }
 
-    hideError (input){
+    _hideError (input){
         const errorElement = this._form.querySelector(`#${input.id}-error`);
         input.classList.remove(this._inputErrorClass);
         
@@ -40,7 +43,7 @@ class FormValidator{
            this._showError(input);
         }
         else{
-           this.hideError (input);
+           this._hideError (input);
         }
        }
 
