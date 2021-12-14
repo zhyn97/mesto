@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./pages/index.css">
     <title>Места России</title>
 </head>
 <body class="body">
     <div class="root">
       <header class="header">
-          <img class="logo" src="./images/logo.svg" alt="логотип">
+          <img class="logo" src="<%=require('./images/logo.svg')%>" alt="логотип">
       </header>
       <main>
           <section class="profile">
-              <img class="avatar" src="./images/avatar.jpg" alt="Изображение профиля">
+              <img class="avatar" src="<%=require('./images/avatar.jpg')%>" alt="Изображение профиля">
               <div class="profile__info">
                 <h1 class="profile__name">Жак-Ив Кусто</h1>
                 <button class="profile__edit-button opacity-button" type="button"></button>
@@ -69,7 +68,7 @@
 
       <template class="template">
         <div class="place">
-          <img src="./images/trash.svg" class="place__trash opacity-button">
+          <img src="<%=require('./images/trash.svg')%>" class="place__trash opacity-button">
           <img src="./images/karachevsk.jpg" alt="крачаевск" class="place__image">
           <div class="place__name-area">
             <h2 class="place__title">Карачаевск</h2>
@@ -78,8 +77,5 @@
         </div>
       </template>
     </div>
-    <script src="./configs/cardsConfig.js"></script>
-    <script src="./configs/validationConfig.js"></script>
-    <script type="module" src="./scripts/index.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-const cardsConfig = {
+export const cardsConfig = {
     place: '.place',
     places: '.places',
     template: '.template',

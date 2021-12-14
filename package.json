@@ -1,0 +1,35 @@
+{
+  "name": "mesto",
+  "version": "1.0.0",
+  "description": "Проект преднозначен для популиризации туризма внутри России.\r Создан в виде блога с возможность сохранения понравившихся мест.",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack build --mode production",
+    "dev": "webpack serve --mode development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhyn97/mesto.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhyn97/mesto/issues"
+  },
+  "homepage": "https://github.com/zhyn97/mesto#readme",
+  "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "autoprefixer": "^10.4.0",
+    "babel-loader": "^8.2.3",
+    "css-loader": "^6.5.1",
+    "cssnano": "^5.0.12",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.4.5",
+    "postcss": "^8.4.5",
+    "postcss-loader": "^6.2.1",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0"
+  }
+}
