@@ -50,7 +50,7 @@ class FormValidator{
 
     _setFormListeners(){
         this._form.addEventListener('input', () => this._checkSaveButton());
-        const inputs = [...this._form.querySelectorAll(this._inputSelector)];
+        const inputs = [...this._inputList];
         inputs.forEach(inputElement => {
             inputElement.addEventListener('input', () => this._handleValidator(inputElement));
         })

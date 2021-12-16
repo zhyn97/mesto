@@ -32,7 +32,7 @@ function editButtonHandler(){
     newName.value = dataUser.name.textContent;
     newOccupation.value = dataUser.occupation.textContent;
     formNameValidator.checkSaveButtonAndClearInputs();
-    popupPersonData.setEventListeners();
+    // popupPersonData.setEventListeners();
     popupPersonData.open();
 }
 
@@ -43,24 +43,28 @@ function saveNamePopup(){
 
 function addButtonHandler(){
     formPlaceValidator.checkSaveButtonAndClearInputs();
-    popupNewCard.setEventListeners();
+    // popupNewCard.setEventListeners();
     popupNewCard.open();
 }
 
 
 
 function saveNewCardPopup(){
-    const item = [popupNewCard._getInputValues()];
-    const newCard = new Section ({
-    data: item,
-    renderer: (item) => {
-        const card = new Card(cardsConfig, item, template, handleCardClick);
-        const newItem = card.generateItem();
+  //   const item = [popupNewCard._getInputValues()];
+  //   const newCard = new Section ({
+  //   data: item,
+  //   renderer: (item) => {
+  //       const card = new Card(cardsConfig, item, template, handleCardClick);
+  //       const newItem = card.generateItem();
 
-        newCard.addItem(newItem);
-      }
-    }, places)
-  newCard.renderItems();
+  //       newCard.addItem(newItem);
+  //     }
+  //   }, places)
+  // newCard.renderItems();
+  const item = popupNewCard._getInputValues();
+  const card = createCard(item);
+  const newItem = card.generateItem();
+  cardList.addItem(newItem);
 }
 
 // работа с классом UserInfo
@@ -71,11 +75,18 @@ const userInfo = new UserInfo({
 
 
 // открытие большой картинки
-const handleCardClick = new PopupWithImage(popupBigImg);
+const popupImage = new PopupWithImage(popupBigImg);
+popupImage.setEventListeners();
+
+function handleCardClicker(name, link){
+  popupImage.open(name, link);
+}
 
 // работа с классом PopupWithForm
 const popupPersonData = new PopupWithForm(popupEdit, saveNamePopup);
 const popupNewCard = new PopupWithForm(popupAdd, saveNewCardPopup);
+popupPersonData.setEventListeners();
+popupNewCard.setEventListeners();
 
 
 // слушатели кликов по кнопкам редактирования имени и добавления карточки
@@ -90,12 +101,16 @@ window.addEventListener('load', ()=>{
   })
 
 
-  // работа с классом Section
+// работа с классом Section
+function createCard (item){
+  const newCard = new Card(cardsConfig, item, template, handleCardClicker);
+  return newCard;
+}
 
     const cardList = new Section ({
       data: initialCards,
       renderer: (item) => {
-          const card = new Card(cardsConfig, item, template, handleCardClick);
+          const card = createCard(item);
           const newItem = card.generateItem();
 
           cardList.addItem(newItem);
@@ -110,3 +125,5 @@ window.addEventListener('load', ()=>{
     const formPlaceValidator = new FormValidator(validationConfig, formPlace);
     formNameValidator.enableValidator();
     formPlaceValidator.enableValidator();
+
+    

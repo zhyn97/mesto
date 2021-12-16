@@ -1,3 +1,5 @@
+import PopupWithForm from "./PopupWithForm";
+
 class Card{
     constructor(config, item, template, openBigImg){
         this._config = config;
@@ -19,8 +21,8 @@ class Card{
     _setEventListeners(){
         this._view.querySelector('.place__trash').addEventListener('click', this._remove);
         this._view.querySelector('.place__like').addEventListener('click', this._like);
-        this._view.querySelector('.place__image').addEventListener('click', () => this._openBigImg.open(event));
-        this._view.querySelector('.place__image').addEventListener('click', () => this._openBigImg.setEventListeners());
+        this._view.querySelector('.place__image').addEventListener('click', () => this._openBigImg(this._item.name, this._item.link));
+        // this._view.querySelector('.place__image').addEventListener('click', () => this._openBigImg.setEventListeners());
     }
 
     generateItem(){

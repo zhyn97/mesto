@@ -1,14 +1,12 @@
 import Popup from '../components/Popup.js';
 
 class PopupWithImage extends Popup{
-    open(event){
+    open(name, link){
         super.open();
-
         const bigImg = this._popupSelector.querySelector('.popup__big-img');
-
-        bigImg.src = event.target.currentSrc;
-        bigImg.alt = event.target.parentNode.querySelector('.place__title').textContent;
-        this._popupSelector.querySelector('.popup__big-img-title').textContent = event.target.alt;
+        bigImg.src = link;
+        bigImg.alt = name;
+        this._popupSelector.querySelector('.popup__big-img-title').textContent = name;
     }
 }
 
