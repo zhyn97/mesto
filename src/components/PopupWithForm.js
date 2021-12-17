@@ -6,10 +6,10 @@ class PopupWithForm extends Popup{
         this._submitForm = submitForm;
         this._form = this._popupSelector.querySelector('.popup__form');
         this._inputs = this._popupSelector.querySelectorAll('.popup__change-line');
-        this._getInputValues = this._getInputValues.bind(this);
+        this._getInputValues = this.getInputValues.bind(this);
     }
 
-    _getInputValues(){
+    getInputValues(){
         const inputsValue = {};
         this._inputs.forEach(item => {
             inputsValue[item.name] = item.value;

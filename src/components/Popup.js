@@ -9,11 +9,13 @@ class Popup{
 
     open(){
         this._popupSelector.classList.add('popup_active');
+        document.addEventListener('keydown', this._handlerEscKey);
     }
     
     close(event) {
         event.preventDefault()
         this._popupSelector.classList.remove('popup_active');
+        document.removeEventListener('keydown', this._handlerEscKey);
         // this._buttonClose.removeEventListener('click', this.close);
         // this._popupSelector.removeEventListener('click', this._cliclHandler);
         // document.removeEventListener('keydown', this._handlerEscKey);
@@ -35,7 +37,7 @@ class Popup{
     setEventListeners(){
         this._buttonClose.addEventListener('click', this.close);
         this._popupSelector.addEventListener('click', this._cliclHandler);
-        document.addEventListener('keydown', this._handlerEscKey);
+        // document.addEventListener('keydown', this._handlerEscKey);
         // this._popupSelector.addEventListener('submit', this.close);
     }
 }

@@ -1,5 +1,3 @@
-import PopupWithForm from "./PopupWithForm";
-
 class Card{
     constructor(config, item, template, openBigImg){
         this._config = config;

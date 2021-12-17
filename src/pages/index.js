@@ -37,7 +37,7 @@ function editButtonHandler(){
 }
 
 function saveNamePopup(){
-    userInfo.setUserInfo(popupPersonData._getInputValues());
+    userInfo.setUserInfo(popupPersonData.getInputValues());
 } 
 
 
@@ -61,10 +61,9 @@ function saveNewCardPopup(){
   //     }
   //   }, places)
   // newCard.renderItems();
-  const item = popupNewCard._getInputValues();
-  const card = createCard(item);
-  const newItem = card.generateItem();
-  cardList.addItem(newItem);
+  const item = popupNewCard.getInputValues();
+  const card = createCard(cardsConfig, item, template, handleCardClicker);
+  cardList.addItem(card);
 }
 
 // работа с классом UserInfo
@@ -102,18 +101,18 @@ window.addEventListener('load', ()=>{
 
 
 // работа с классом Section
-function createCard (item){
+function createCard (cardsConfig, item, template, handleCardClicker){
   const newCard = new Card(cardsConfig, item, template, handleCardClicker);
-  return newCard;
+  return newCard.generateItem();
 }
 
     const cardList = new Section ({
       data: initialCards,
       renderer: (item) => {
-          const card = createCard(item);
-          const newItem = card.generateItem();
+          const card = createCard(cardsConfig, item, template, handleCardClicker);
+          // const newItem = card.generateItem();
 
-          cardList.addItem(newItem);
+          cardList.addItem(card);
         }
     }, places)
     cardList.renderItems();
