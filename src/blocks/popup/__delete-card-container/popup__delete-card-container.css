@@ -1,6 +1,6 @@
-.popup__container{
+.popup__delete-card-container{
     min-width: 430px;
-    min-height: 272px;
+    max-height: 181px;
     background-color: white;
     border-radius: 10px;
     position: relative;
@@ -8,9 +8,8 @@
 }
 
 @media screen and (max-width: 550px) {
-    .popup__container{
-      min-width: 282px;
-      max-width: 282px;
-      min-height: 322px;
+    .popup__delete-card-container{
+      min-width: 330px;
+      max-width: 330px;
     }
 }

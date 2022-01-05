@@ -16,10 +16,6 @@ class Popup{
         event.preventDefault()
         this._popupSelector.classList.remove('popup_active');
         document.removeEventListener('keydown', this._handlerEscKey);
-        // this._buttonClose.removeEventListener('click', this.close);
-        // this._popupSelector.removeEventListener('click', this._cliclHandler);
-        // document.removeEventListener('keydown', this._handlerEscKey);
-        // this._popupSelector.removeEventListener('submit', this.close);
     }
 
     _handlerEscKey(event){
@@ -37,8 +33,6 @@ class Popup{
     setEventListeners(){
         this._buttonClose.addEventListener('click', this.close);
         this._popupSelector.addEventListener('click', this._cliclHandler);
-        // document.addEventListener('keydown', this._handlerEscKey);
-        // this._popupSelector.addEventListener('submit', this.close);
     }
 }
 

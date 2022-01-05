@@ -3,4 +3,5 @@
     width: 246px;
     align-self: center;
     justify-content: space-between;
+    flex-wrap: wrap;
 }

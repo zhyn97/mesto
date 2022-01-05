@@ -10,8 +10,14 @@ export const newName = document.querySelector('.popup__name');
 export const newOccupation = document.querySelector('.popup__occupation');
 export const popupEdit = document.querySelector('.popup-edit');
 export const popupAdd = document.querySelector('.popup-add');
+export const popupDelete = document.querySelector('.popup_delete-card');
 export const newPlaceName = document.querySelector('.name-new-place');
 export const newPlaceLink = document.querySelector('.link-new-place');
+export const avatar = document.querySelector('.profile__avatar');
+export const avatarImg = document.querySelector('.profile__edit-view');
+export const popupAvatar = document.querySelector('.popup-avatar');
+export const formAvatar = document.querySelector('.form-avatar');
+
 
 
 export const initialCards = [

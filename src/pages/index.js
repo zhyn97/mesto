@@ -1,13 +1,15 @@
-import '../pages/index.css'
+import "../pages/index.css";
 
-import Card from '../components/Card.js';
-import FormValidator from '../components/FormValidator.js';
-import Section from '../components/Section.js';
-import PopupWithImage from '../components/PopupWithImage.js';
-import PopupWithForm from '../components/PopupWithForm.js';
-import UserInfo from '../components/UserInfo.js';
-import {cardsConfig} from '../configs/cardsConfig.js';
-import {validationConfig} from '../configs/validationConfig.js';
+import Card from "../components/Card.js";
+import FormValidator from "../components/FormValidator.js";
+import Section from "../components/Section.js";
+import PopupWithImage from "../components/PopupWithImage.js";
+import PopupWithForm from "../components/PopupWithForm.js";
+import PopupWithComfirm from "../components/PopupWithComfirm.js";
+import UserInfo from "../components/UserInfo.js";
+import { cardsConfig } from "../configs/cardsConfig.js";
+import { validationConfig } from "../configs/validationConfig.js";
+import Api from "../components/Api.js";
 
 import {
   editButton,
@@ -20,109 +22,320 @@ import {
   newOccupation,
   popupEdit,
   popupAdd,
-  initialCards,
   places,
   template,
-  popupBigImg
-} from '../utilits/constants.js'
+  popupBigImg,
+  avatar,
+  avatarImg,
+  popupDelete,
+  popupAvatar,
+  formAvatar,
+} from "../utilits/constants.js";
 
-
-function editButtonHandler(){
-    const dataUser = userInfo.getUserInfo();
-    newName.value = dataUser.name.textContent;
-    newOccupation.value = dataUser.occupation.textContent;
-    formNameValidator.checkSaveButtonAndClearInputs();
-    // popupPersonData.setEventListeners();
-    popupPersonData.open();
+function avatarHandler() {
+  formAvatarValidator.checkSaveButtonAndClearInputs();
+  popupNewAvatar.open();
 }
 
-function saveNamePopup(){
-    userInfo.setUserInfo(popupPersonData.getInputValues());
-} 
-
-
-function addButtonHandler(){
-    formPlaceValidator.checkSaveButtonAndClearInputs();
-    // popupNewCard.setEventListeners();
-    popupNewCard.open();
+function saveAvatar() {
+  popupNewAvatar.loading(true);
+  const data = popupNewAvatar.getInputValues();
+  api
+    .newAvatar(data.link)
+    .then((res) => {
+      console.log("Аватар сохранен", res);
+      userInfo.setUserInfo(res);
+    })
+    .catch((err) => {
+      console.log("Произошла ошибка", err);
+    })
+    .finally(() => {
+      popupNewAvatar.loading(false);
+    });
 }
 
+function editButtonHandler() {
+  const dataUser = userInfo.getUserInfo();
+  newName.value = dataUser.name.textContent;
+  newOccupation.value = dataUser.occupation.textContent;
+  formNameValidator.checkSaveButtonAndClearInputs();
+  // popupPersonData.setEventListeners();
+  popupPersonData.open();
+}
 
+function saveNamePopup() {
+  //userInfo.setUserInfo(popupPersonData.getInputValues());
+  popupPersonData.loading(true);
+  const data = popupPersonData.getInputValues();
 
-function saveNewCardPopup(){
-  //   const item = [popupNewCard._getInputValues()];
-  //   const newCard = new Section ({
-  //   data: item,
-  //   renderer: (item) => {
-  //       const card = new Card(cardsConfig, item, template, handleCardClick);
-  //       const newItem = card.generateItem();
+  api
+    .editUserData(data.name, data.about)
+    .then((res) => {
+      console.log("Данные сохранены", res);
+      api
+        .getUserData()
+        .then((res) => {
+          console.log(res);
+          userInfo.setUserInfo(res);
+        })
+        .catch((err) => {
+          console.log("Произошла ошибка", err);
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      popupPersonData.loading(false);
+    });
+}
 
-  //       newCard.addItem(newItem);
-  //     }
-  //   }, places)
-  // newCard.renderItems();
+function addButtonHandler() {
+  formPlaceValidator.checkSaveButtonAndClearInputs();
+  popupNewCard.open();
+}
+
+function saveNewCardPopup() {
+  popupNewCard.loading(true);
   const item = popupNewCard.getInputValues();
-  const card = createCard(cardsConfig, item, template, handleCardClicker);
-  cardList.addItem(card);
+  console.log(item);
+
+  Promise.all([api.getUserData(), api.addNewCard(item.name, item.link)])
+    .then(([userData, card]) => {
+      const user = userData;
+      const cardList = new Section(
+        {
+          data: [card],
+          renderer: (item) => {
+            const card = createCard(
+              cardsConfig,
+              item,
+              template,
+              handleCardClicker,
+              {
+                handleDeleteCard: (item) => {
+                  popupComfirm.open();
+                  popupComfirm.setHandler(() => {
+                    api
+                      .deleteCard(item)
+                      .then((res) => {
+                        console.log(res);
+                        card.remove();
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  });
+                },
+                setLike: (item) => {
+                  if (
+                    card
+                      .querySelector(".place__like")
+                      .classList.contains("place__like_active")
+                  ) {
+                    Promise.all([api.getUserData(), api.deleteLike(item)])
+                      .then(([userData, deleteInf]) => {
+                        console.log("лайк был, но мы удалили");
+                        card.querySelector(".place__number-likes").textContent =
+                          deleteInf.likes.length;
+                        card
+                          .querySelector(".place__like")
+                          .classList.remove("place__like_active");
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  } else {
+                    Promise.all([api.getUserData(), api.setLike(item)])
+                      .then(([userData, likes]) => {
+                        console.log("лайка не было, но мы установили");
+                        card.querySelector(".place__number-likes").textContent =
+                          likes.likes.length;
+                        card
+                          .querySelector(".place__like")
+                          .classList.add("place__like_active");
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  }
+                },
+              },
+              user
+            );
+            cardList.appendCard(card);
+          },
+        },
+        places
+      );
+      cardList.renderItems();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      popupNewCard.loading(false);
+    });
 }
 
 // работа с классом UserInfo
 const userInfo = new UserInfo({
   name: nameField,
-  occupation: occupationField
+  occupation: occupationField,
+  avatar: avatarImg,
 });
-
 
 // открытие большой картинки
 const popupImage = new PopupWithImage(popupBigImg);
 popupImage.setEventListeners();
 
-function handleCardClicker(name, link){
+const popupComfirm = new PopupWithComfirm(popupDelete);
+popupComfirm.setEventListeners();
+
+function handleCardClicker(name, link) {
   popupImage.open(name, link);
 }
 
 // работа с классом PopupWithForm
 const popupPersonData = new PopupWithForm(popupEdit, saveNamePopup);
 const popupNewCard = new PopupWithForm(popupAdd, saveNewCardPopup);
+const popupNewAvatar = new PopupWithForm(popupAvatar, saveAvatar);
+
 popupPersonData.setEventListeners();
 popupNewCard.setEventListeners();
-
+popupNewAvatar.setEventListeners();
 
 // слушатели кликов по кнопкам редактирования имени и добавления карточки
-editButton.addEventListener('click', editButtonHandler);
-addButton.addEventListener('click', addButtonHandler);
-
-
+editButton.addEventListener("click", editButtonHandler);
+addButton.addEventListener("click", addButtonHandler);
+avatar.addEventListener("click", avatarHandler);
 
 //функция плавного открытия и закрытия popup
-window.addEventListener('load', ()=>{
-    document.querySelectorAll('.popup').forEach((popup) => popup.classList.add('popup_opacity'))
-  })
-
+window.addEventListener("load", () => {
+  document
+    .querySelectorAll(".popup")
+    .forEach((popup) => popup.classList.add("popup_opacity"));
+});
 
 // работа с классом Section
-function createCard (cardsConfig, item, template, handleCardClicker){
-  const newCard = new Card(cardsConfig, item, template, handleCardClicker);
+function createCard(
+  cardsConfig,
+  item,
+  template,
+  handleCardClicker,
+  { handleDeleteCard, setLike },
+  user
+) {
+  const newCard = new Card(
+    cardsConfig,
+    item,
+    template,
+    handleCardClicker,
+    { handleDeleteCard, setLike },
+    user
+  );
   return newCard.generateItem();
 }
 
-    const cardList = new Section ({
-      data: initialCards,
-      renderer: (item) => {
-          const card = createCard(cardsConfig, item, template, handleCardClicker);
-          // const newItem = card.generateItem();
+//работа с классом FormValidator
+const formNameValidator = new FormValidator(validationConfig, formName);
+const formPlaceValidator = new FormValidator(validationConfig, formPlace);
+const formAvatarValidator = new FormValidator(validationConfig, formAvatar);
+formNameValidator.enableValidator();
+formPlaceValidator.enableValidator();
+formAvatarValidator.enableValidator();
 
-          cardList.addItem(card);
-        }
-    }, places)
-    cardList.renderItems();
+const api = new Api({
+  address: "https://mesto.nomoreparties.co/v1/cohort-32",
+  token: "375f8480-1170-4121-a89c-9ffd6ccda63c",
+});
+//Получение данных пользователя
+api
+  .getUserData()
+  .then((res) => {
+    console.log("Данные собраны", res);
+    userInfo.setUserInfo(res);
+  })
+  .catch((err) => {
+    console.log("Возникла ошибка", err);
+  });
 
+// Отрисовка карточек
+function renderCards() {
+  Promise.all([api.getUserData(), api.getCards()])
+    .then(([userData, cards]) => {
+      const user = userData;
+      const cardList = new Section(
+        {
+          data: cards,
+          renderer: (item) => {
+            const card = createCard(
+              cardsConfig,
+              item,
+              template,
+              handleCardClicker,
+              {
+                handleDeleteCard: (item) => {
+                  popupComfirm.open();
+                  // console.log(item);
+                  popupComfirm.setHandler(() => {
+                    api
+                      .deleteCard(item)
+                      .then((res) => {
+                        console.log(res);
+                        card.remove();
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  });
+                },
+                setLike: (item) => {
+                  if (
+                    card
+                      .querySelector(".place__like")
+                      .classList.contains("place__like_active")
+                  ) {
+                    Promise.all([api.getUserData(), api.deleteLike(item)])
+                      .then(([userData, deleteInf]) => {
+                        console.log("лайк был, но мы удалили");
+                        card.querySelector(".place__number-likes").textContent =
+                          deleteInf.likes.length;
+                        card
+                          .querySelector(".place__like")
+                          .classList.remove("place__like_active");
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  } else {
+                    Promise.all([api.getUserData(), api.setLike(item)])
+                      .then(([userData, likes]) => {
+                        console.log("лайка не было, но мы установили");
+                        card.querySelector(".place__number-likes").textContent =
+                          likes.likes.length;
+                        card
+                          .querySelector(".place__like")
+                          .classList.add("place__like_active");
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  }
+                },
+              },
+              user
+            );
+            cardList.addItem(card);
+          },
+        },
+        places
+      );
+      cardList.renderItems();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
 
-
-    //работа с классом FormValidator
-    const formNameValidator = new FormValidator(validationConfig, formName);
-    const formPlaceValidator = new FormValidator(validationConfig, formPlace);
-    formNameValidator.enableValidator();
-    formPlaceValidator.enableValidator();
-
-    
+renderCards();

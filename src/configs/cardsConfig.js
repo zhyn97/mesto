@@ -4,4 +4,5 @@ export const cardsConfig = {
     template: '.template',
     popupBigImg: '.popup_big-img',
     formNewPlace: '.form-place',
+    confirm: '.popup_delete-card'
   }
