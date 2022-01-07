@@ -4,18 +4,20 @@ class Api {
     this.token = token;
   }
 
+  _checkResponse(res){
+    if (res.ok) {
+      return res.json();
+    } else {
+      return Promise.reject(`Ошибка : ${res.status}`);
+    }
+  }
+
   getUserData() {
     return fetch(`${this.address}/users/me`, {
       headers: {
         authorization: "375f8480-1170-4121-a89c-9ffd6ccda63c",
       },
-    }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject(`Ошибка : ${res.status}`);
-      }
-    });
+    }).then(this._checkResponse);
   }
 
   getCards() {
@@ -23,13 +25,7 @@ class Api {
       headers: {
         authorization: "375f8480-1170-4121-a89c-9ffd6ccda63c",
       },
-    }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject(`Ошибка : ${res.status}`);
-      }
-    });
+    }).then(this._checkResponse);
   }
 
   editUserData(name, about) {
@@ -43,13 +39,7 @@ class Api {
         name: name,
         about: about,
       }),
-    }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject(`Ошибка : ${res.status}`);
-      }
-    });
+    }).then(this._checkResponse);
   }
 
   addNewCard(name, link) {
@@ -63,13 +53,7 @@ class Api {
         name: name,
         link: link,
       }),
-    }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject(`Ошибка : ${res.status}`);
-      }
-    });
+    }).then(this._checkResponse);
   }
 
   deleteCard(id) {
@@ -78,13 +62,7 @@ class Api {
       headers: {
         authorization: "375f8480-1170-4121-a89c-9ffd6ccda63c",
       },
-    }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject(`Ошибка : ${res.status}`);
-      }
-    });
+    }).then(this._checkResponse);
   }
 
   setLike(id) {
@@ -93,13 +71,7 @@ class Api {
       headers: {
         authorization: "375f8480-1170-4121-a89c-9ffd6ccda63c",
       },
-    }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject(`Ошибка : ${res.status}`);
-      }
-    });
+    }).then(this._checkResponse);
   }
 
   deleteLike(id) {
@@ -108,13 +80,7 @@ class Api {
       headers: {
         authorization: "375f8480-1170-4121-a89c-9ffd6ccda63c",
       },
-    }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject(`Ошибка : ${res.status}`);
-      }
-    });
+    }).then(this._checkResponse);
   }
 
   newAvatar(link) {
@@ -127,13 +93,7 @@ class Api {
       body: JSON.stringify({
         avatar: link,
       }),
-    }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject(`Ошибка : ${res.status}`);
-      }
-    });
+    }).then(this._checkResponse);
   }
 }
 
