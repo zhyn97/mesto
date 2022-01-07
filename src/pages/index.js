@@ -32,6 +32,11 @@ import {
   formAvatar,
 } from "../utilits/constants.js";
 
+const api = new Api({
+  address: "https://mesto.nomoreparties.co/v1/cohort-32",
+  token: "375f8480-1170-4121-a89c-9ffd6ccda63c",
+});
+
 function avatarHandler() {
   formAvatarValidator.checkSaveButtonAndClearInputs();
   popupNewAvatar.open();
@@ -59,12 +64,10 @@ function editButtonHandler() {
   newName.value = dataUser.name.textContent;
   newOccupation.value = dataUser.occupation.textContent;
   formNameValidator.checkSaveButtonAndClearInputs();
-  // popupPersonData.setEventListeners();
   popupPersonData.open();
 }
 
 function saveNamePopup() {
-  //userInfo.setUserInfo(popupPersonData.getInputValues());
   popupPersonData.loading(true);
   const data = popupPersonData.getInputValues();
 
@@ -95,6 +98,86 @@ function addButtonHandler() {
   popupNewCard.open();
 }
 
+//Получение данных пользователя
+let user;
+api
+  .getUserData()
+  .then((res) => {
+    console.log("Данные собраны", res);
+    userInfo.setUserInfo(res);
+    user = res;
+  })
+  .catch((err) => {
+    console.log("Возникла ошибка", err);
+  });
+
+// Работа с классом Section
+const cardList = new Section(
+  {
+    renderer: (item) => {
+      const card = createCard(
+        cardsConfig,
+        item,
+        template,
+        handleCardClicker,
+        {
+          handleDeleteCard: (item) => {
+            popupComfirm.open();
+            // console.log(item);
+            popupComfirm.setHandler(() => {
+              api
+                .deleteCard(item)
+                .then((res) => {
+                  console.log(res);
+                  card.remove();
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            });
+          },
+          setLike: (item) => {
+            if (
+              card
+                .querySelector(".place__like")
+                .classList.contains("place__like_active")
+            ) {
+              Promise.all([api.getUserData(), api.deleteLike(item)])
+                .then(([userData, deleteInf]) => {
+                  console.log("лайк был, но мы удалили");
+                  card.querySelector(".place__number-likes").textContent =
+                    deleteInf.likes.length;
+                  card
+                    .querySelector(".place__like")
+                    .classList.remove("place__like_active");
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            } else {
+              Promise.all([api.getUserData(), api.setLike(item)])
+                .then(([userData, likes]) => {
+                  console.log("лайка не было, но мы установили");
+                  card.querySelector(".place__number-likes").textContent =
+                    likes.likes.length;
+                  card
+                    .querySelector(".place__like")
+                    .classList.add("place__like_active");
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
+          },
+        },
+        user
+      );
+      return card;
+    },
+  },
+  places
+);
+
 function saveNewCardPopup() {
   popupNewCard.loading(true);
   const item = popupNewCard.getInputValues();
@@ -103,72 +186,7 @@ function saveNewCardPopup() {
   Promise.all([api.getUserData(), api.addNewCard(item.name, item.link)])
     .then(([userData, card]) => {
       const user = userData;
-      const cardList = new Section(
-        {
-          data: [card],
-          renderer: (item) => {
-            const card = createCard(
-              cardsConfig,
-              item,
-              template,
-              handleCardClicker,
-              {
-                handleDeleteCard: (item) => {
-                  popupComfirm.open();
-                  popupComfirm.setHandler(() => {
-                    api
-                      .deleteCard(item)
-                      .then((res) => {
-                        console.log(res);
-                        card.remove();
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                      });
-                  });
-                },
-                setLike: (item) => {
-                  if (
-                    card
-                      .querySelector(".place__like")
-                      .classList.contains("place__like_active")
-                  ) {
-                    Promise.all([api.getUserData(), api.deleteLike(item)])
-                      .then(([userData, deleteInf]) => {
-                        console.log("лайк был, но мы удалили");
-                        card.querySelector(".place__number-likes").textContent =
-                          deleteInf.likes.length;
-                        card
-                          .querySelector(".place__like")
-                          .classList.remove("place__like_active");
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                      });
-                  } else {
-                    Promise.all([api.getUserData(), api.setLike(item)])
-                      .then(([userData, likes]) => {
-                        console.log("лайка не было, но мы установили");
-                        card.querySelector(".place__number-likes").textContent =
-                          likes.likes.length;
-                        card
-                          .querySelector(".place__like")
-                          .classList.add("place__like_active");
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                      });
-                  }
-                },
-              },
-              user
-            );
-            cardList.appendCard(card);
-          },
-        },
-        places
-      );
-      cardList.renderItems();
+      cardList.addNewCard(card);
     })
     .catch((err) => {
       console.log(err);
@@ -217,7 +235,7 @@ window.addEventListener("load", () => {
     .forEach((popup) => popup.classList.add("popup_opacity"));
 });
 
-// работа с классом Section
+// работа с классом Card
 function createCard(
   cardsConfig,
   item,
@@ -245,93 +263,11 @@ formNameValidator.enableValidator();
 formPlaceValidator.enableValidator();
 formAvatarValidator.enableValidator();
 
-const api = new Api({
-  address: "https://mesto.nomoreparties.co/v1/cohort-32",
-  token: "375f8480-1170-4121-a89c-9ffd6ccda63c",
-});
-//Получение данных пользователя
-api
-  .getUserData()
-  .then((res) => {
-    console.log("Данные собраны", res);
-    userInfo.setUserInfo(res);
-  })
-  .catch((err) => {
-    console.log("Возникла ошибка", err);
-  });
-
 // Отрисовка карточек
 function renderCards() {
   Promise.all([api.getUserData(), api.getCards()])
     .then(([userData, cards]) => {
-      const user = userData;
-      const cardList = new Section(
-        {
-          data: cards,
-          renderer: (item) => {
-            const card = createCard(
-              cardsConfig,
-              item,
-              template,
-              handleCardClicker,
-              {
-                handleDeleteCard: (item) => {
-                  popupComfirm.open();
-                  // console.log(item);
-                  popupComfirm.setHandler(() => {
-                    api
-                      .deleteCard(item)
-                      .then((res) => {
-                        console.log(res);
-                        card.remove();
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                      });
-                  });
-                },
-                setLike: (item) => {
-                  if (
-                    card
-                      .querySelector(".place__like")
-                      .classList.contains("place__like_active")
-                  ) {
-                    Promise.all([api.getUserData(), api.deleteLike(item)])
-                      .then(([userData, deleteInf]) => {
-                        console.log("лайк был, но мы удалили");
-                        card.querySelector(".place__number-likes").textContent =
-                          deleteInf.likes.length;
-                        card
-                          .querySelector(".place__like")
-                          .classList.remove("place__like_active");
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                      });
-                  } else {
-                    Promise.all([api.getUserData(), api.setLike(item)])
-                      .then(([userData, likes]) => {
-                        console.log("лайка не было, но мы установили");
-                        card.querySelector(".place__number-likes").textContent =
-                          likes.likes.length;
-                        card
-                          .querySelector(".place__like")
-                          .classList.add("place__like_active");
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                      });
-                  }
-                },
-              },
-              user
-            );
-            cardList.addItem(card);
-          },
-        },
-        places
-      );
-      cardList.renderItems();
+      cardList.renderItems(cards);
     })
     .catch((err) => {
       console.log(err);

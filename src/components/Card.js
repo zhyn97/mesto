@@ -3,6 +3,7 @@ class Card{
         this._config = config;
         this._item = item;
         this._view = template.querySelector(this._config.place).cloneNode(true);
+        this._img = this._view.querySelector('.place__image')
         this.remove = this.remove.bind(this);
         this._openBigImg = openBigImg;
         this._handleDeleteCard = handleDeleteCard;
@@ -25,13 +26,13 @@ class Card{
     _setEventListeners(){
         this._setDeleteButton();
         this._view.querySelector('.place__like').addEventListener('click', () => this._setLike(this._item._id));
-        this._view.querySelector('.place__image').addEventListener('click', () => this._openBigImg(this._item.name, this._item.link));
+        this._img.addEventListener('click', () => this._openBigImg(this._item.name, this._item.link));
     }
 
     generateItem(){
         this._view.querySelector('.place__title').textContent = this._item.name;
-        this._view.querySelector('.place__image').src = this._item.link;
-        this._view.querySelector('.place__image').alt = this._item.name;
+        this._img.src = this._item.link;
+        this._img.alt = this._item.name;
         this._view.querySelector('.place__number-likes').textContent = this._item.likes.length;
         
         this._item.likes.forEach(like => {
